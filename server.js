@@ -40,11 +40,18 @@ app.post("/savereview", function (request, response) {
     var pubID = request.body.pubID
     var result = request.body.result
     var comments = request.body.comments
+    var interesting = request.body.interesting
 
 
     var stream = fs.createWriteStream("log.csv", { flags: 'a' });
-    stream.write(pubID+";"+ result + ";"+comments+"\n");
+    stream.write(pubID+";"+ result + ";"+comments+";\n");
     stream.end();
+
+    if(interesting=="on"){
+        var stream = fs.createWriteStream("interesting.csv", { flags: 'a' });
+        stream.write(pubID +";"+ result + ";"+ comments +";\n");
+        stream.end();
+    }
 
     fs.readFile('pending.json', (err, data) => {
         if (err) throw err;
