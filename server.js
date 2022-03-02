@@ -32,10 +32,29 @@ app.get("/", function (request, response) {
 
 });
 
+// router to next paper
+app.get("/checkArticle", function (request, response) {
+
+    var publication = request.query.pub
+    fs.readFile('all.json', (err, data) => {
+        if (err) throw err;
+        let pubs = JSON.parse(data);
+
+        var pub = pubs[publication]
+
+        if(pub){
+            response.render("reviewpublication", { 'publication': pub });
+        } else {
+            response.render("error", {'data':request.query.pub})
+        }
+    });
+
+});
+
 // router to save review
 app.post("/savereview", function (request, response) {
 
-    console.log(request.body)
+    // console.log(request.body)
 
     var pubID = request.body.pubID
     var result = request.body.result
